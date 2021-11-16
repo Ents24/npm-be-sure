@@ -1,0 +1,31 @@
+{
+  "name": "be-sure",
+  "description": "NPM module for terse, 'throwy' validation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^27.3.1"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ents24/npm-be-sure.git"
+  },
+  "keywords": [
+    "terse",
+    "validation",
+    "throwy"
+  ],
+  "author": "Ents24",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ents24/npm-be-sure/issues"
+  },
+  "homepage": "https://github.com/Ents24/npm-be-sure#readme"
+}
