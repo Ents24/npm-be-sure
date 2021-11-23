@@ -1,6 +1,9 @@
 {
-  "name": "be-sure",
+  "name": "@ents24/be-sure",
   "description": "NPM module for terse, 'throwy' validation",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {},
