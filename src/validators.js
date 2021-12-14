@@ -8,6 +8,8 @@ const isPositiveInt32 = value => isInt32(value) && value > 0
 
 const isNonEmptyString = value => typeof value === 'string' && value.length > 0
 
+const isStringWithWordCharacters = value => typeof value === 'string' && !!value.match(/\w/)
+
 /**
  * A set of validator functions accessible by key. Each returns Boolean true
  * .. if the passed value is valid, false otherwise. Note that these
@@ -19,9 +21,11 @@ const isNonEmptyString = value => typeof value === 'string' && value.length > 0
   'id': value => isPositiveInt32(value),
   'int': value => isInt32(value),
   'int+': value => isPositiveInt32(value),
+  'name': value => isStringWithWordCharacters(value),
   'page': value => isPositiveInt32(value),
   'slug': value => isNonEmptyString(value) && !!value.match(/^[a-z0-9\-]+$/),
-  'string-not-empty': value => isNonEmptyString(value)
+  'string': value => typeof value === 'string',
+  'string-not-empty': value => isNonEmptyString(value),
 }
 
 module.exports.getValidator = (key) => {
