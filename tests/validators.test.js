@@ -33,9 +33,9 @@ const standardIntegerTests = key => {
  * @param {string} key the validator key to run all tests against
  */
 const positiveIntegerTests = key => {
-
   standardIntegerTests(key)
 
+  // Bad...
   expect( () => beSure(0, key)).toThrow(ValidationError)
   expect( () => beSure(-0, key)).toThrow(ValidationError)
   expect( () => beSure(-1, key)).toThrow(ValidationError)
@@ -43,6 +43,10 @@ const positiveIntegerTests = key => {
   expect( () => beSure(-999999, key)).toThrow(ValidationError)
   expect( () => beSure(-0o51, key)).toThrow(ValidationError)
 }
+
+test('id validator', () => positiveIntegerTests('id'))
+test('int validator', () => standardIntegerTests('int'))
+test('int+ validator', () => positiveIntegerTests('int+'))
 
 /**
  * Run a set of specific string tests for the given validator key
@@ -59,9 +63,16 @@ const standardStringTests = key => {
   expect( () => beSure(1, key)).toThrow(ValidationError)
 }
 
-test('id validator', () => positiveIntegerTests('id'))
-test('int validator', () => standardIntegerTests('int'))
-test('int+ validator', () => positiveIntegerTests('int+'))
+test('string validator', () => {
+  standardStringTests('string')
+})
+
+test('string-not-empty validator', () => {
+  standardStringTests('string-not-empty')
+
+  // Bad...
+  expect( () => beSure('', 'string-not-empty')).toThrow(ValidationError)
+})
 
 test('name validator', () => {
   standardStringTests('name')
@@ -82,25 +93,38 @@ test('name validator', () => {
 
 test('page validator', () => positiveIntegerTests('page'))
 
-test('slug validator', () => {
+/**
+ * Run a set of specific slug tests for the given validator key
+ * @param {string} key the validator key to run all tests against
+ */
+ const standardSlugTests = key => {
   // Good...
-  expect( () => beSure('1', 'slug')).not.toThrow()
-  expect( () => beSure('a', 'slug')).not.toThrow()
-  expect( () => beSure('bjork-with-15-piece-chamber-ensemble', 'slug')).not.toThrow()
+  expect( () => beSure('1', key)).not.toThrow()
+  expect( () => beSure('a', key)).not.toThrow()
+  expect( () => beSure('bjork-with-15-piece-chamber-ensemble', key)).not.toThrow()
 
   // Bad...
-  expect( () => beSure('', 'slug')).toThrow(ValidationError)
-  expect( () => beSure('björk-with-15-piece-chamber-ensemble', 'slug')).toThrow(ValidationError)
-  expect( () => beSure(0, 'slug')).toThrow(ValidationError)
-  expect( () => beSure(1, 'slug')).toThrow(ValidationError)
-  expect( () => beSure(true, 'slug')).toThrow(ValidationError)
+  expect( () => beSure('', key)).toThrow(ValidationError)
+  expect( () => beSure('björk-with-15-piece-chamber-ensemble', key)).toThrow(ValidationError)
+  expect( () => beSure(0, key)).toThrow(ValidationError)
+  expect( () => beSure(1, key)).toThrow(ValidationError)
+  expect( () => beSure(true, key)).toThrow(ValidationError)
+}
+
+test('slug validator', () => {
+  standardSlugTests('slug')
+
+  // Bad...
+  expect( () => beSure('UPPERCASE', 'slug')).toThrow(ValidationError)
+  expect( () => beSure('UPPERCASE-WITH-DASHES', 'slug')).toThrow(ValidationError)
 })
 
-test('string validator', () => {
-  standardStringTests('string')
+
+test('slug validator', () => {
+  standardSlugTests('slug-mixed')
+
+  // Good...
+  expect( () => beSure('UPPERCASE', 'slug-mixed')).not.toThrow()
+  expect( () => beSure('UPPERCASE-WITH-DASHES', 'slug-mixed')).not.toThrow()
 })
 
-test('string-not-empty validator', () => {
-  standardStringTests('string-not-empty')
-  expect( () => beSure('', 'string-not-empty')).toThrow(ValidationError)
-})

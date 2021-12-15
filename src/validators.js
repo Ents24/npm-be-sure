@@ -24,6 +24,7 @@ const isStringWithWordCharacters = value => typeof value === 'string' && !!value
   'name': value => isStringWithWordCharacters(value),
   'page': value => isPositiveInt32(value),
   'slug': value => isNonEmptyString(value) && !!value.match(/^[a-z0-9\-]+$/),
+  'slug-mixed': value => isNonEmptyString(value) && !!value.match(/^[a-zA-Z0-9\-]+$/),
   'string': value => typeof value === 'string',
   'string-not-empty': value => isNonEmptyString(value),
 }
