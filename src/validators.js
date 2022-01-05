@@ -10,6 +10,13 @@ const isNonEmptyString = value => typeof value === 'string' && value.length > 0
 
 const isStringWithWordCharacters = value => typeof value === 'string' && !!value.match(/\w/)
 
+const isObject = value => {
+  let isNotArray =  Array.isArray(value) === false
+  let isNotNull = value !== null
+  return typeof value === 'object' && isNotArray && isNotNull
+}
+
+
 /**
  * A set of validator functions accessible by key. Each returns Boolean true
  * .. if the passed value is valid, false otherwise. Note that these
@@ -18,10 +25,15 @@ const isStringWithWordCharacters = value => typeof value === 'string' && !!value
  * .. match an app's requirements
  */
  const validators = {
+  'array': value => Array.isArray(value),
+  'array-not-empty': value => Array.isArray(value) && value.length > 0,
+  'bool': value => typeof value == "boolean",
   'id': value => isPositiveInt32(value),
   'int': value => isInt32(value),
   'int+': value => isPositiveInt32(value),
   'name': value => isStringWithWordCharacters(value),
+  'object': value => isObject(value),
+  'object-not-empty': value => isObject(value) && Object.keys(value).length > 0,
   'page': value => isPositiveInt32(value),
   'slug': value => isNonEmptyString(value) && !!value.match(/^[a-z0-9\-]+$/),
   'slug-mixed': value => isNonEmptyString(value) && !!value.match(/^[a-zA-Z0-9\-]+$/),

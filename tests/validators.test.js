@@ -1,13 +1,33 @@
 const ValidationError = require('../src/validation-error')
 const { beSure } = require('../index.js')
 
-test('invalid calls', () => {
-  expect( () => beSure()).toThrow()
-  expect( () => beSure(1)).toThrow()
-  expect( () => beSure(1,2)).toThrow()
-  expect( () => beSure('moose')).toThrow()
-  expect( () => beSure(true)).toThrow()
-  expect( () => beSure(1, 'not-a-validator-key')).toThrow()
+/**
+ * Run a set of specific array tests for the given validator key
+ * @param {string} key the validator key to run all tests against
+ */
+ const standardArrayTests = key => {
+  // Good...
+  expect( () => beSure([1], key)).not.toThrow()
+  expect( () => beSure([1,2,3], key)).not.toThrow()
+  expect( () => beSure([{saddle:'goose'}], key)).not.toThrow()
+
+  // Bad...
+  expect( () => beSure(1, key)).toThrow(ValidationError)
+  expect( () => beSure('a', key)).toThrow(ValidationError)
+  expect( () => beSure({}, key)).toThrow(ValidationError)
+  expect( () => beSure(null, key)).toThrow(ValidationError)
+}
+
+test('array validator', () => {
+  standardArrayTests('array')
+  // This is fine...
+  expect( () => beSure([], 'array')).not.toThrow()
+})
+
+test('array-not-empty validator', () => {
+  standardArrayTests('array-not-empty')
+  // This is not fine...
+  expect( () => beSure([], 'array-not-empty')).toThrow()
 })
 
 /**
@@ -63,15 +83,43 @@ const standardStringTests = key => {
   expect( () => beSure(1, key)).toThrow(ValidationError)
 }
 
-test('string validator', () => {
-  standardStringTests('string')
-})
-
-test('string-not-empty validator', () => {
-  standardStringTests('string-not-empty')
+/**
+ * Run a set of specific slug tests for the given validator key
+ * @param {string} key the validator key to run all tests against
+ */
+ const standardSlugTests = key => {
+  // Good...
+  expect( () => beSure('1', key)).not.toThrow()
+  expect( () => beSure('a', key)).not.toThrow()
+  expect( () => beSure('bjork-with-15-piece-chamber-ensemble', key)).not.toThrow()
 
   // Bad...
-  expect( () => beSure('', 'string-not-empty')).toThrow(ValidationError)
+  expect( () => beSure('', key)).toThrow(ValidationError)
+  expect( () => beSure('björk-with-15-piece-chamber-ensemble', key)).toThrow(ValidationError)
+  expect( () => beSure(0, key)).toThrow(ValidationError)
+  expect( () => beSure(1, key)).toThrow(ValidationError)
+  expect( () => beSure(true, key)).toThrow(ValidationError)
+}
+
+test('invalid calls', () => {
+  expect( () => beSure()).toThrow()
+  expect( () => beSure(1)).toThrow()
+  expect( () => beSure(1,2)).toThrow()
+  expect( () => beSure('moose')).toThrow()
+  expect( () => beSure(true)).toThrow()
+  expect( () => beSure(1, 'not-a-validator-key')).toThrow()
+})
+
+test('bool validator', () => {
+  // Good...
+  expect( () => beSure(true, 'bool')).not.toThrow()
+  expect( () => beSure(false, 'bool')).not.toThrow()
+
+  // Bad...
+  expect( () => beSure(1, 'bool')).toThrow()
+  expect( () => beSure('moose I up', 'bool')).toThrow()
+  expect( () => beSure([], 'bool')).toThrow()
+  expect( () => beSure({}, 'bool')).toThrow()
 })
 
 test('name validator', () => {
@@ -91,25 +139,37 @@ test('name validator', () => {
   expect( () => beSure(' * ', 'name')).toThrow(ValidationError)
 })
 
-test('page validator', () => positiveIntegerTests('page'))
 
 /**
- * Run a set of specific slug tests for the given validator key
+ * Run a set of specific object tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
- const standardSlugTests = key => {
+ const standardObjectTests = key => {
   // Good...
-  expect( () => beSure('1', key)).not.toThrow()
-  expect( () => beSure('a', key)).not.toThrow()
-  expect( () => beSure('bjork-with-15-piece-chamber-ensemble', key)).not.toThrow()
+  expect( () => beSure({saddle:'goose'}, key)).not.toThrow()
 
   // Bad...
-  expect( () => beSure('', key)).toThrow(ValidationError)
-  expect( () => beSure('björk-with-15-piece-chamber-ensemble', key)).toThrow(ValidationError)
-  expect( () => beSure(0, key)).toThrow(ValidationError)
-  expect( () => beSure(1, key)).toThrow(ValidationError)
-  expect( () => beSure(true, key)).toThrow(ValidationError)
+  expect( () => beSure(1, key)).toThrow()
+  expect( () => beSure('moose I up', key)).toThrow()
+  expect( () => beSure([], key)).toThrow()
+  expect( () => beSure(null, key)).toThrow()
+  expect( () => beSure(true, key)).toThrow()
+  expect( () => beSure(false, key)).toThrow()
 }
+
+test('object validator', () => {
+  standardObjectTests('object')
+  // This is fine...
+  expect( () => beSure({}, 'object')).not.toThrow()
+})
+
+test('object-not-empty validator', () => {
+  standardObjectTests('object-not-empty')
+  // This is not fine...
+  expect( () => beSure({}, 'object-not-empty')).toThrow()
+})
+
+test('page validator', () => positiveIntegerTests('page'))
 
 test('slug validator', () => {
   standardSlugTests('slug')
@@ -119,12 +179,22 @@ test('slug validator', () => {
   expect( () => beSure('UPPERCASE-WITH-DASHES', 'slug')).toThrow(ValidationError)
 })
 
-
 test('slug validator', () => {
   standardSlugTests('slug-mixed')
 
   // Good...
   expect( () => beSure('UPPERCASE', 'slug-mixed')).not.toThrow()
   expect( () => beSure('UPPERCASE-WITH-DASHES', 'slug-mixed')).not.toThrow()
+})
+
+test('string validator', () => {
+  standardStringTests('string')
+})
+
+test('string-not-empty validator', () => {
+  standardStringTests('string-not-empty')
+
+  // Bad...
+  expect( () => beSure('', 'string-not-empty')).toThrow(ValidationError)
 })
 
