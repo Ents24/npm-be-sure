@@ -18,7 +18,7 @@ module.exports.beSure = (value, key) => {
   const ok = validator(value)
 
   if (ok !== true) {
-    throw new ValidationError(`${value} is not a valid ${key}`)
+    throw new ValidationError(`${value} failed validation for: "${key}"`)
   }
 }
 

@@ -102,7 +102,7 @@ const dog = {
 // ✓ No problem
 beSure(cat, 'cat')
 
-// ✗ ValidationError: [object Object] is not a valid cat
+// ✗ ValidationError: [object Object] failed validation for "cat"
 beSure(dog, 'cat')
 
 const maxSignedInt32 = 2147483647
