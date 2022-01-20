@@ -32,6 +32,7 @@ const isObject = value => {
   'int': value => isInt32(value),
   'int+': value => isPositiveInt32(value),
   'name': value => isStringWithWordCharacters(value),
+  'defined': value => typeof value !== 'undefined',
   'object': value => isObject(value),
   'object-not-empty': value => isObject(value) && Object.keys(value).length > 0,
   'page': value => isPositiveInt32(value),

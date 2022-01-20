@@ -122,6 +122,24 @@ test('bool validator', () => {
   expect( () => beSure({}, 'bool')).toThrow()
 })
 
+test('defined validator', () => {
+  var cliveIsDefined = 'Clive'
+
+  // Good...
+  expect( () => beSure(cliveIsDefined, 'defined')).not.toThrow()
+  expect( () => beSure(null, 'defined')).not.toThrow()
+  expect( () => beSure(true, 'defined')).not.toThrow()
+  expect( () => beSure(false, 'defined')).not.toThrow()
+  expect( () => beSure(1, 'defined')).not.toThrow()
+  expect( () => beSure('Do a flip!', 'defined')).not.toThrow()
+  expect( () => beSure([], 'defined')).not.toThrow()
+  expect( () => beSure({}, 'defined')).not.toThrow()
+
+  // Bad...
+  expect( () => beSure(alanIsUndefined, 'defined')).toThrow()
+  expect( () => beSure(undefined, 'defined')).toThrow()
+})
+
 test('name validator', () => {
   standardStringTests('name')
 
