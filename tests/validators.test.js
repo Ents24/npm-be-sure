@@ -140,6 +140,29 @@ test('defined validator', () => {
   expect( () => beSure(undefined, 'defined')).toThrow()
 })
 
+test('email validator', () => {
+  // Good, borrowed from https://en.wikipedia.org/wiki/Email_address
+  expect( () => beSure('a@b.co', 'email')).not.toThrow()
+  expect( () => beSure('very.common@example.com', 'email')).not.toThrow()
+  expect( () => beSure('disposable.style.email.with+symbol@example.com', 'email')).not.toThrow()
+  expect( () => beSure('other.email-with-hyphen@example.com', 'email')).not.toThrow()
+  expect( () => beSure('fully-qualified-domain@example.com', 'email')).not.toThrow()
+  expect( () => beSure('user.name+tag+sorting@example.com', 'email')).not.toThrow()
+  expect( () => beSure('x@example.com', 'email')).not.toThrow()
+  expect( () => beSure('example-indeed@strange-example.com', 'email')).not.toThrow()
+  expect( () => beSure('example@s.example', 'email')).not.toThrow()
+  expect( () => beSure('user%example.com@example.org', 'email')).not.toThrow()
+  expect( () => beSure('user-@example.org', 'email')).not.toThrow()
+
+  // Bad...
+  expect( () => beSure(1, 'email')).toThrow()
+  expect( () => beSure(true, 'email')).toThrow()
+  expect( () => beSure([], 'email')).toThrow()
+  expect( () => beSure({}, 'email')).toThrow()
+  expect( () => beSure('Abc.example.com', 'email')).toThrow() // no @ character
+  expect( () => beSure('A@b@c@example.com', 'email')).toThrow() // multiple @ character
+})
+
 test('name validator', () => {
   standardStringTests('name')
 
@@ -214,5 +237,6 @@ test('string-not-empty validator', () => {
 
   // Bad...
   expect( () => beSure('', 'string-not-empty')).toThrow(ValidationError)
+  expect( () => beSure(null, 'string-not-empty')).toThrow(ValidationError)
 })
 

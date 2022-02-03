@@ -16,6 +16,12 @@ const isObject = value => {
   return typeof value === 'object' && isNotArray && isNotNull
 }
 
+/**
+ * Permissive level of email validation enforces the structure _@_._ (with a single "@"" symbol) only
+ * @param {String} value
+ * @returns Boolean true if `value` matches the permissive email regex
+ */
+const isEmailPermissive = value => isNonEmptyString(value) && !!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/i)
 
 /**
  * A set of validator functions accessible by key. Each returns Boolean true
@@ -28,6 +34,7 @@ const isObject = value => {
   'array': value => Array.isArray(value),
   'array-not-empty': value => Array.isArray(value) && value.length > 0,
   'bool': value => typeof value == "boolean",
+  'email': isEmailPermissive,
   'id': value => isPositiveInt32(value),
   'int': value => isInt32(value),
   'int+': value => isPositiveInt32(value),
