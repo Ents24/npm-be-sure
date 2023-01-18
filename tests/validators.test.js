@@ -1,5 +1,5 @@
 const ValidationError = require('../src/validation-error')
-const { beSure } = require('../index.js')
+const { beSure, beSureAllowNull } = require('../index.js')
 
 /**
  * Run a set of specific array tests for the given validator key
@@ -28,6 +28,22 @@ test('array-not-empty validator', () => {
   standardArrayTests('array-not-empty')
   // This is not fine...
   expect( () => beSure([], 'array-not-empty')).toThrow()
+})
+
+test('array validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'array')).not.toThrow()
+  expect( () => beSureAllowNull([], 'array')).not.toThrow()
+  expect( () => beSureAllowNull(5, 'array')).toThrow()
+  expect( () => beSureAllowNull('a string', 'array')).toThrow()
+  expect( () => beSureAllowNull(undefined, 'array')).toThrow()
+})
+
+test('array-not-empty validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'array-not-empty')).not.toThrow()
+  expect( () => beSureAllowNull([], 'array-not-empty')).toThrow()
+  expect( () => beSureAllowNull(5, 'array-not-empty')).toThrow()
+  expect( () => beSureAllowNull('a string', 'array-not-empty')).toThrow()
+  expect( () => beSureAllowNull(undefined, 'array-not-empty')).toThrow()
 })
 
 /**
@@ -67,6 +83,19 @@ const positiveIntegerTests = key => {
 test('id validator', () => positiveIntegerTests('id'))
 test('int validator', () => standardIntegerTests('int'))
 test('int+ validator', () => positiveIntegerTests('int+'))
+
+test('id, int, int+ validators allow null', () => {
+  expect( () => beSureAllowNull(null, 'id')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'id')).not.toThrow()
+  expect( () => beSureAllowNull(0, 'id')).toThrow()
+  expect( () => beSureAllowNull(null, 'int')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'int')).not.toThrow()
+  expect( () => beSureAllowNull(0, 'int')).not.toThrow()
+  expect( () => beSureAllowNull('0', 'int')).toThrow()
+  expect( () => beSureAllowNull(null, 'int+')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'int+')).not.toThrow()
+  expect( () => beSureAllowNull(0, 'int+')).toThrow()
+})
 
 /**
  * Run a set of specific string tests for the given validator key
@@ -120,6 +149,12 @@ test('bool validator', () => {
   expect( () => beSure('moose I up', 'bool')).toThrow()
   expect( () => beSure([], 'bool')).toThrow()
   expect( () => beSure({}, 'bool')).toThrow()
+})
+
+test('bool validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'bool')).not.toThrow()
+  expect( () => beSureAllowNull(true, 'bool')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'bool')).toThrow()
 })
 
 test('defined validator', () => {
@@ -210,7 +245,23 @@ test('object-not-empty validator', () => {
   expect( () => beSure({}, 'object-not-empty')).toThrow()
 })
 
+test('object, object-not-empty validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'object')).not.toThrow()
+  expect( () => beSureAllowNull({}, 'object')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'object')).toThrow()
+  expect( () => beSureAllowNull(null, 'object-not-empty')).not.toThrow()
+  expect( () => beSureAllowNull({'key': 'value'}, 'object-not-empty')).not.toThrow()
+  expect( () => beSureAllowNull({}, 'object-not-empty')).toThrow()
+  expect( () => beSureAllowNull(1, 'object-not-empty')).toThrow()
+})
+
 test('page validator', () => positiveIntegerTests('page'))
+
+test('page validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'page')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'page')).not.toThrow()
+  expect( () => beSureAllowNull('1', 'page')).toThrow()
+})
 
 test('slug validator', () => {
   standardSlugTests('slug')
@@ -240,3 +291,17 @@ test('string-not-empty validator', () => {
   expect( () => beSure(null, 'string-not-empty')).toThrow(ValidationError)
 })
 
+test('name, slug, string, string-not-empty, validators allow null', () => {
+  expect( () => beSureAllowNull(null, 'name')).not.toThrow()
+  expect( () => beSureAllowNull('hello', 'name')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'name')).toThrow()
+  expect( () => beSureAllowNull(null, 'slug')).not.toThrow()
+  expect( () => beSureAllowNull('hello', 'slug')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'slug')).toThrow()
+  expect( () => beSureAllowNull(null, 'string')).not.toThrow()
+  expect( () => beSureAllowNull('hello', 'string')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'string')).toThrow()
+  expect( () => beSureAllowNull(null, 'string-not-empty')).not.toThrow()
+  expect( () => beSureAllowNull('hello', 'string-not-empty')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'string-not-empty')).toThrow()
+})
