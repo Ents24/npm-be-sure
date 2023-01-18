@@ -1,5 +1,5 @@
 const ValidationError = require('../src/validation-error')
-const { beSure } = require('./custom.js')
+const { beSure } = require('./customValidator.js')
 
 const cat = {
   name: 'Colin',
