@@ -158,10 +158,10 @@ test('bool validator allow null', () => {
 })
 
 test('defined validator', () => {
-  var cliveIsDefined = 'Clive'
+  var aVariable = 'Some text'
 
   // Good...
-  expect( () => beSure(cliveIsDefined, 'defined')).not.toThrow()
+  expect( () => beSure(aVariable, 'defined')).not.toThrow()
   expect( () => beSure(null, 'defined')).not.toThrow()
   expect( () => beSure(true, 'defined')).not.toThrow()
   expect( () => beSure(false, 'defined')).not.toThrow()
@@ -171,8 +171,16 @@ test('defined validator', () => {
   expect( () => beSure({}, 'defined')).not.toThrow()
 
   // Bad...
-  expect( () => beSure(alanIsUndefined, 'defined')).toThrow()
+  expect( () => beSure(aVariableThatIsUndefined, 'defined')).toThrow()
   expect( () => beSure(undefined, 'defined')).toThrow()
+})
+
+test('defined validator allow null', () => {
+  expect( () => beSureAllowNull(null, 'defined')).not.toThrow()
+  expect( () => beSureAllowNull(1, 'defined')).not.toThrow()
+  expect( () => beSureAllowNull(null, 'defined')).not.toThrow()
+  expect( () => beSureAllowNull(undefined, 'defined')).toThrow()
+
 })
 
 test('email validator', () => {
