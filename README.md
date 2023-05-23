@@ -54,6 +54,21 @@ const { beSure } = require('@ents24/be-sure')
 beSure(myParam, 'slug')
 ```
 
+## Custom Error Type / Text
+
+Include an error type to instantiate and throw where needed
+
+```js
+const { beSure } = require('@ents24/be-sure')
+class MySpecificError extends Error {}
+
+// Type only
+beSure(myParam, 'slug', MySpecificError)
+
+// Or include text, too
+beSure(myParam, 'slug', MySpecificError, 'My specific message')
+```
+
 ## Custom Use
 
 Provide your own validator or redefine existing ones via a wrapper module (see [custom.js](tests/custom.js) for example)

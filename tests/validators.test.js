@@ -1,6 +1,13 @@
 const ValidationError = require('../src/validation-error')
 const { beSure, beSureAllowNull } = require('../index.js')
 
+class Moose extends ValidationError {
+  constructor(message) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+
 /**
  * Run a set of specific array tests for the given validator key
  * @param {string} key the validator key to run all tests against
@@ -312,4 +319,18 @@ test('name, slug, string, string-not-empty, validators allow null', () => {
   expect( () => beSureAllowNull(null, 'string-not-empty')).not.toThrow()
   expect( () => beSureAllowNull('hello', 'string-not-empty')).not.toThrow()
   expect( () => beSureAllowNull(1, 'string-not-empty')).toThrow()
+})
+
+test('string values are decorated correctly', () => {
+  try {
+    beSure('', 'string-not-empty')
+  } catch (e) {
+    expect(e.message).toBe("'' failed validation for: string-not-empty")
+  }
+
+  try {
+    beSure(' ', 'string-not-empty')
+  } catch (e) {
+    expect(e.message).toBe("' ' failed validation for: string-not-empty")
+  }
 })
