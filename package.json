@@ -1,19 +1,28 @@
 {
   "name": "@ents24/be-sure",
+  "version": "1.1.2",
   "description": "NPM module for terse, 'throwy' validation",
+  "type": "module",
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.1.2",
-  "main": "index.js",
-  "devDependencies": {
-    "jest": "^29.3.1"
-  },
   "scripts": {
-    "test": "jest"
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "copyPackage": "cd dist && cp -f ../package.json .",
+    "prepublishOnly": "sh -c 'if [ \"${PWD##*/}\" != \"dist\" ]; then echo \"Publish must be run from /dist, see README.md for steps\" && exit 1; fi'",
+    "publishDist": "npm run copyPackage && cd dist && npm publish --dry-run"
   },
   "directories": {
     "test": "tests"
+  },
+  "main": "./dist/index",
+  "types": "./dist/index",
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "ts-jest": "^29.1.1",
+    "@types/jest": "^29.5.6"
   },
   "repository": {
     "type": "git",
@@ -21,6 +30,7 @@
   },
   "keywords": [
     "terse",
+    "runtime",
     "validation",
     "throwy"
   ],

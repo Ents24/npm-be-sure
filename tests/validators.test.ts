@@ -1,18 +1,12 @@
-const ValidationError = require('../src/validation-error')
-const { beSure, beSureAllowNull } = require('../index.js')
-
-class Moose extends ValidationError {
-  constructor(message) {
-    super(message);
-    this.name = "ValidationError";
-  }
-}
+import ValidationError from '../src/validation-error'
+import { beSure, beSureAllowNull } from '../src/index'
+import { BeSureKey } from '../src/validators'
 
 /**
  * Run a set of specific array tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
- const standardArrayTests = key => {
+const standardArrayTests = (key:BeSureKey) => {
   // Good...
   expect( () => beSure([1], key)).not.toThrow()
   expect( () => beSure([1,2,3], key)).not.toThrow()
@@ -57,7 +51,7 @@ test('array-not-empty validator allow null', () => {
  * Run a set of specific integer tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
-const standardIntegerTests = key => {
+const standardIntegerTests = (key:BeSureKey) => {
   // Good...
   expect( () => beSure(1, key)).not.toThrow()
   expect( () => beSure(10, key)).not.toThrow()
@@ -75,7 +69,7 @@ const standardIntegerTests = key => {
  * Run a set of specific positive integer tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
-const positiveIntegerTests = key => {
+const positiveIntegerTests = (key:BeSureKey) => {
   standardIntegerTests(key)
 
   // Bad...
@@ -108,7 +102,7 @@ test('id, int, int+ validators allow null', () => {
  * Run a set of specific string tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
-const standardStringTests = key => {
+const standardStringTests = (key:BeSureKey) => {
   // Good
   expect( () => beSure('Plankton', key)).not.toThrow()
 
@@ -123,7 +117,7 @@ const standardStringTests = key => {
  * Run a set of specific slug tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
- const standardSlugTests = key => {
+ const standardSlugTests = (key:BeSureKey) => {
   // Good...
   expect( () => beSure('1', key)).not.toThrow()
   expect( () => beSure('a', key)).not.toThrow()
@@ -137,13 +131,8 @@ const standardStringTests = key => {
   expect( () => beSure(true, key)).toThrow(ValidationError)
 }
 
-test('invalid calls', () => {
-  expect( () => beSure()).toThrow()
-  expect( () => beSure(1)).toThrow()
-  expect( () => beSure(1,2)).toThrow()
-  expect( () => beSure('moose')).toThrow()
-  expect( () => beSure(true)).toThrow()
-  expect( () => beSure(1, 'not-a-validator-key')).toThrow()
+test('missing validator', () => {
+  expect( () => beSure(1, 'not-a-validator-key' as BeSureKey)).toThrow()
 })
 
 test('bool validator', () => {
@@ -178,6 +167,7 @@ test('defined validator', () => {
   expect( () => beSure({}, 'defined')).not.toThrow()
 
   // Bad...
+  const aVariableThatIsUndefined = undefined
   expect( () => beSure(aVariableThatIsUndefined, 'defined')).toThrow()
   expect( () => beSure(undefined, 'defined')).toThrow()
 })
@@ -230,12 +220,11 @@ test('name validator', () => {
   expect( () => beSure(' * ', 'name')).toThrow(ValidationError)
 })
 
-
 /**
  * Run a set of specific object tests for the given validator key
  * @param {string} key the validator key to run all tests against
  */
- const standardObjectTests = key => {
+ const standardObjectTests = (key:BeSureKey) => {
   // Good...
   expect( () => beSure({saddle:'goose'}, key)).not.toThrow()
 
@@ -324,13 +313,13 @@ test('name, slug, string, string-not-empty, validators allow null', () => {
 test('string values are decorated correctly', () => {
   try {
     beSure('', 'string-not-empty')
-  } catch (e) {
+  } catch (e: any) {
     expect(e.message).toBe("'' failed validation for: string-not-empty")
   }
 
   try {
     beSure(' ', 'string-not-empty')
-  } catch (e) {
+  } catch (e: any) {
     expect(e.message).toBe("' ' failed validation for: string-not-empty")
   }
 })
