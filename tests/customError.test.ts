@@ -1,11 +1,11 @@
-const ValidationError = require('../src/validation-error')
-const { beSure, beSureAllowNull } = require('../index.js')
+import ValidationError from '../src/validation-error'
+import { beSure, beSureAllowNull } from '../src/index'
 
 // A valid custom error class
 class CustomError extends Error{}
 
 // An invalid custom error class
-class CustomBigInt extends BigInt{}
+class CustomDate extends Date{}
 
 test('Valid custom error types are thrown', () => {
   expect( () => beSure(0, 'string', Error)).toThrow(Error)
@@ -22,19 +22,19 @@ test('Valid custom error types are thrown', () => {
 })
 
 test('Invalid custom error types ignored', () => {
-  expect( () => beSure(0, 'string', CustomBigInt)).toThrow(ValidationError)
-  expect( () => beSure(0, 'string', CustomBigInt, 'boourns')).toThrow(ValidationError)
-  expect( () => beSureAllowNull(0, 'string', CustomBigInt)).toThrow(ValidationError)
-  expect( () => beSureAllowNull(0, 'string', CustomBigInt, 'boourns')).toThrow(ValidationError)
+  expect( () => beSure(0, 'string', CustomDate)).toThrow(ValidationError)
+  expect( () => beSure(0, 'string', CustomDate, 'boourns')).toThrow(ValidationError)
+  expect( () => beSureAllowNull(0, 'string', CustomDate)).toThrow(ValidationError)
+  expect( () => beSureAllowNull(0, 'string', CustomDate, 'boourns')).toThrow(ValidationError)
 })
 
 test('Custom error text is used', () => {
   expect( () => beSure(0, 'string', Error, 'OH NO!')).toThrow('OH NO!')
   expect( () => beSure(0, 'string', RangeError, 'OH NO!')).toThrow('OH NO!')
   expect( () => beSure(0, 'string', CustomError, 'OH NO!')).toThrow('OH NO!')
-  expect( () => beSure(0, 'string', CustomBigInt, 'OH NO!')).toThrow('OH NO!')
+  expect( () => beSure(0, 'string', CustomDate, 'OH NO!')).toThrow('OH NO!')
   expect( () => beSureAllowNull(0, 'string', Error, 'OH NO!')).toThrow('OH NO!')
   expect( () => beSureAllowNull(0, 'string', RangeError, 'OH NO!')).toThrow('OH NO!')
   expect( () => beSureAllowNull(0, 'string', CustomError, 'OH NO!')).toThrow('OH NO!')
-  expect( () => beSureAllowNull(0, 'string', CustomBigInt, 'OH NO!')).toThrow('OH NO!')
+  expect( () => beSureAllowNull(0, 'string', CustomDate, 'OH NO!')).toThrow('OH NO!')
 })

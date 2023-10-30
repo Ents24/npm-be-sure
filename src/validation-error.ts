@@ -3,12 +3,9 @@
  * .. check whether a thrown error came from here
  * Extend Error to ensure stack trace https://javascript.info/custom-errors
  */
-class ValidationError extends Error {
-  constructor(message) {
+export default class ValidationError extends Error {
+  constructor(message: string) {
     super(message);
     this.name = "ValidationError";
   }
 }
-
-
-module.exports = ValidationError;
