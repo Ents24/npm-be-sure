@@ -10,7 +10,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "copyPackage": "cd dist && cp -f ../package.json .",
+    "copyPackage": "cd dist && cp -f ../package.json . && cp -f ../README_NPM.md ./README.md && cp -f ../LICENSE .",
     "prepublishOnly": "sh -c 'if [ \"${PWD##*/}\" != \"dist\" ]; then echo \"Publish must be run from /dist, see README.md for steps\" && exit 1; fi'",
     "publishDist": "npm run copyPackage && cd dist && npm publish"
   },
