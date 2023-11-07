@@ -12,7 +12,7 @@
     "test": "jest",
     "copyPackage": "cd dist && cp -f ../package.json .",
     "prepublishOnly": "sh -c 'if [ \"${PWD##*/}\" != \"dist\" ]; then echo \"Publish must be run from /dist, see README.md for steps\" && exit 1; fi'",
-    "publishDist": "npm run copyPackage && cd dist && npm publish --dry-run"
+    "publishDist": "npm run copyPackage && cd dist && npm publish"
   },
   "directories": {
     "test": "tests"
