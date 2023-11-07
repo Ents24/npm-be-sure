@@ -83,7 +83,7 @@ Provide your own key / validator combinations for later use (see [custom.js](tes
 
 ### Publish - Short Version
 1. `npm run build`
-2. `npm run version<major|minor|patch>`
+2. `npm version <major|minor|patch>`
 3. `npm run publishDist`
 
 ### Publish - Explanation
@@ -114,5 +114,5 @@ Custom script performs the copy / cd / publish steps.
 
 To build the required module files, bump the version and publish to npm:
 1. `npm run build`
-2. `npm run version<major|minor|patch>`
+2. `npm version <major|minor|patch>`
 3. `npm run publishDist`
