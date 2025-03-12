@@ -201,6 +201,8 @@ test('email validator', () => {
   expect( () => beSure({}, 'email')).toThrow()
   expect( () => beSure('Abc.example.com', 'email')).toThrow() // no @ character
   expect( () => beSure('A@b@c@example.com', 'email')).toThrow() // multiple @ character
+  expect( () => beSure('.test@example.com', 'email')).toThrow() // leading dot in username
+  expect( () => beSure('test.@example.com', 'email')).toThrow() // trailing dot in username
 })
 
 test('name validator', () => {
