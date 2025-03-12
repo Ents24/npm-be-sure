@@ -21,7 +21,21 @@ const isObject = (value:object) => {
  * @param {String} value
  * @returns Boolean true if `value` matches the permissive email regex
  */
-const isEmailPermissive = (value:String) => isNonEmptyString(value) && !!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/i)
+const isEmailPermissive = (value:String) => {
+  if(!isNonEmptyString(value)) { return false }
+
+  if(!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/i)) {
+    return false
+  }
+
+  const [username] = value.split('@')
+
+  if(username?.startsWith('.') || username?.endsWith('.')) {
+    return false
+  }
+
+  return true
+}
 
 /**
  * All BeSureValidators accept a single value and return a boolean indicating validation outcome
