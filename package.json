@@ -2,23 +2,34 @@
   "name": "@ents24/be-sure",
   "version": "2.0.3",
   "description": "NPM module for terse, 'throwy' validation",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
+    "build:localpack": "npm run clean && npm run build && npm run copyPackage && cd dist && npm pack --pack-destination ../",
+    "build": "npm run build:cjs && npm run build:esm",
     "watch": "tsc -w",
     "test": "jest",
     "copyPackage": "cd dist && cp -f ../package.json . && cp -f ../README_NPM.md ./README.md && cp -f ../LICENSE .",
     "prepublishOnly": "sh -c 'if [ \"${PWD##*/}\" != \"dist\" ]; then echo \"Publish must be run from /dist, see README.md for steps\" && exit 1; fi'",
-    "publishDist": "npm run copyPackage && cd dist && npm publish"
+    "publishDist": "npm run copyPackage && cd dist && npm publish",
+    "clean": "rm -rf dist",
+    "rename:esm": "./scripts/fix-mjs.sh"
   },
   "directories": {
     "test": "tests"
   },
-  "main": "./dist/index",
-  "types": "./dist/index",
+  "main": "./cjs/index.js",
+  "module": "./esm/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./cjs/index.js",
+      "import": "./esm/index.mjs"
+    }
+  },
+  "types": "./types/index.d.ts",
   "devDependencies": {
     "typescript": "^5.2.2",
     "ts-jest": "^29.1.1",
